@@ -1,8 +1,6 @@
--- define tabela player
 Player = {}
 
 function Player:Load()
-     --Define Player props
      self.img =  love.graphics.newImage("img/player.png")
      self.w = self.img:getWidth()
      self.h = self.img:getHeight()
@@ -31,10 +29,8 @@ function Player:Load()
 end
 
 function Player:Update(dt)
-     -- player rotation
      self.r = self.r + dt*2
 
-     -- self commands
      if love.keyboard.isDown("w") then
         self.body:applyForce(0, -300)
      elseif love.keyboard.isDown("a") then
@@ -45,7 +41,6 @@ function Player:Update(dt)
         self.body:applyForce(300, 0)
      end
 
-     -- Define boards interations
      if self.body:getY() < 0 then
          self.body:setY(Height)
      end
@@ -59,7 +54,6 @@ function Player:Update(dt)
         self.body:setX(0)
      end
 
-     --Fire action
      self.canFire = self.canFire - dt
      if love.mouse.isDown(1) and self.canFire <= 0 then
         self:Fire()

@@ -33,9 +33,6 @@ end
 
 function Bullet:Update(dt)
     for i, b in ipairs(Player.bullets) do
-        --update bullet position
-        --b.x = b.x + (b.Speed * b.dir.x * dt)
-        --b.y = b.y + (b.Speed * b.dir.y * dt)
         b.body:setLinearVelocity(b.Speed * b.dir.x * dt, b.Speed * b.dir.y * dt)
         b.life = b.life - dt
         if b.life <= 0  then
