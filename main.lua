@@ -3,23 +3,20 @@ require("Modules.bullet")
 require("Modules.asteroids")
 Width = love.graphics.getWidth()
 Height = love.graphics.getHeight()
-Red = 100/255
-Green = 100/255
-Blue = 130/255
 
 function love.load()
     love.physics.setMeter(64)
     World = love.physics.newWorld(0.1*64, 0.1*64, true)
     World:setCallbacks(beginContact, endContact, preSolve, postSolve)
-    love.graphics.setBackgroundColor(Red,Green,Blue)
+    love.graphics.setBackgroundColor(100/255,100/255,130/255)
 
     Player:Load()
 
-    static = {}
-    static.b = love.physics.newBody(World, 400,400, "static")
-    static.s = love.physics.newRectangleShape(200,50)
-    static.f = love.physics.newFixture(static.b, static.s)
-    static.f:setUserData("Block")
+    static = {
+        b = love.physics.newBody(World, 400,400, "static"),
+        s = love.physics.newRectangleShape(200,50),
+    }
+    static.f = love.physics.newFixture(static.b, static.s) :setUserData("Block")
 
     persisting = 0
     love.graphics.setBackgroundColor(0.41, 0.53, 0.97)
@@ -38,7 +35,7 @@ function love.draw()
     love.graphics.print("Bullets: "..#Player.bullets)
 end
 
-function love.keypressed(key, scancode, isrepeat)
+function love.keypressed(key)
     if key == "escape" then
         love.event.quit("apertou esc")
     end
@@ -49,11 +46,11 @@ function beginContact(a, b, coll)
     Bullet:BeginContact(a, b, coll)
 end
 
-function endContact(a, b, coll)
+function endContact()
     persisting = 0
 end
 
-function preSolve(a, b, coll)
+function preSolve()
     if persisting == 0 then
     elseif persisting < 20 then
     end
