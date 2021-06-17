@@ -19,4 +19,5 @@ function Asteroid:Create()
         asteroid.x = math.random(Width)
         asteroid.y = Height
     end
+    return asteroid
 end
