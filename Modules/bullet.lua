@@ -50,9 +50,9 @@ end
 function Bullet:BeginContact(a, b, coll)
     if string.match(b:getUserData(), "bullet") and a:getUserData() ~= "player" then
         for i, bu in ipairs(Player.bullets) do
-          if bu.fixture:getUserData() == b:getUserData() then
-            table.remove(Player.bullets, i)
-          end
+            if bu.fixture:getUserData() == b:getUserData() then
+                table.remove(Player.bullets, i)
+            end
         end
-      end
+    end
 end
