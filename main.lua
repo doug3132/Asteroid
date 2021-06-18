@@ -4,6 +4,7 @@ require("Modules.asteroids")
 
 Width = love.graphics.getWidth()
 Height = love.graphics.getHeight()
+Destroy_queue = {}
 
 function love.load()
     love.physics.setMeter(64)
@@ -24,16 +25,22 @@ function love.load()
 end
 
 function love.update(dt)
+    Asteroid:Update(dt)
     Player:Update(dt)
     Bullet:Update(dt)
-    Asteroid:Update(dt)
+    if table.getn(Destroy_queue) > 0 then
+        for b in pairs(Destroy_queue) do
+            World:DestroyBody(b)
+            Destroy_queue[b] = nil
+        end
+    end
     World:update(dt)
 end
 
 function love.draw()
+    Asteroid:Draw()
     Bullet:Draw()
     Player:Draw()
-    Asteroid:Draw()
     love.graphics.polygon("line", static.b:getWorldPoints(static.s:getPoints()))
     love.graphics.print("Bullets: "..#Player.bullets)
 end
@@ -46,8 +53,8 @@ end
 
 function beginContact(a, b, coll)
     x,y = coll:getNormal()
-    Asteroid:BeginContact(a, b, coll)
     Bullet:BeginContact(a, b, coll)
+    Asteroid:BeginContact(a, b, coll)
     
 end
 
