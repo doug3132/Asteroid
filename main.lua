@@ -13,7 +13,6 @@ function love.load()
 
     Player:Load()
 
-    Asteroid:Create()
     static = {
         b = love.physics.newBody(World, 400,400, "static"),
         s = love.physics.newRectangleShape(200,50),
@@ -47,7 +46,9 @@ end
 
 function beginContact(a, b, coll)
     x,y = coll:getNormal()
+    Asteroid:BeginContact(a, b, coll)
     Bullet:BeginContact(a, b, coll)
+    
 end
 
 function endContact()

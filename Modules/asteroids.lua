@@ -1,18 +1,22 @@
 Asteroid = {
     img = love.graphics.newImage("img/Asteroid_Brown.png"),
     asteroids = {},
-    cd = 5,
-    canSpawn = 1
+    cd = 2,
+    canSpawn = 1,
+    asteroidNum = 0
 }
 
-function Asteroid:Create()
+function Asteroid:Create(num)
     local rand = math.random(100)
     local asteroid = {
         w = Asteroid.img:getWidth(),
         h = Asteroid.img:getHeight(),
         sx = 0.5,
         sy = 0.5,
-        Speed = 19000
+        Speed = 1700,
+        ox = Asteroid.img:getWidth()/ 2,
+        oy = Asteroid.img:getWidth() / 2,
+        life = 100,
     }
 
     if rand < 20 then
@@ -33,20 +37,54 @@ function Asteroid:Create()
     asteroid.fixture = love.physics.newFixture(asteroid.body, asteroid.shape, 1)
     asteroid.fixture:setRestitution(0.9)
     asteroid.fixture:setFriction(1)
-    asteroid.fixture:setUserData("asteroid"..math.random(1000))
+    asteroid.fixture:setUserData("asteroid"..num)
+    asteroid.dir = { x =asteroid.x, y =asteroid.y}
+    local normal = (asteroid.dir.x ^ 2 + asteroid.dir.y^2) ^ 0.5
+    asteroid.dir.x = asteroid.dir.x / normal
+    asteroid.dir.y = asteroid.dir.y / normal
     return asteroid
 end
 
 function Asteroid:Update(dt)
     self.canSpawn = self.canSpawn - dt
     if self.canSpawn <= 0 then
-        table.insert(self.asteroids, self:Create())
+        table.insert(self.asteroids, self:Create(self.asteroidNum))
         self.canSpawn = self.cd
+        self.asteroidNum = self.asteroidNum + 1
     end 
+    for i, b in ipairs(Asteroid.asteroids) do
+        b.body:setLinearVelocity(b.Speed * b.dir.x * dt, -b.Speed * b.dir.y * dt)
+        b.life = b.life - dt
+        if b.life <= 0  then
+            table.remove(Asteroid.asteroids, i)
+        end
+        if b.body:getY() < 0 then
+            b.body:setY(Height)
+         end
+         if b.body:getY() > Height then
+            b.body:setY(0)
+         end
+         if b.body:getX() < 0 then
+            b.body:setX(Width)
+         end
+         if b.body:getX() > Width then
+            b.body:setX(0)
+         end
+    end
 end
 
 function Asteroid:Draw()
     for i, b in ipairs(self.asteroids) do
         love.graphics.draw(self.img, b.body:getX(), b.body:getY(), b.r, b.sx,b.sy, b.ox, b.oy)
+    end
+end
+
+function Asteroid:BeginContact(a, b, coll)
+    if string.match(b:getUserData(), "asteroid") and a:getUserData() ~= "player" then
+        for i, as in ipairs(Asteroid.asteroids) do
+            if as.fixture:getUserData() == b:getUserData() then
+                table.remove(Asteroid.asteroids, i)
+            end
+        end
     end
 end
