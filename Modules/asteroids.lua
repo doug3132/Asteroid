@@ -9,7 +9,10 @@ function Asteroid:Create()
     local rand = math.random(100)
     local asteroid = {
         w = Asteroid.img:getWidth(),
-        h = Asteroid.img:getHeight()
+        h = Asteroid.img:getHeight(),
+        sx = 0.5,
+        sy = 0.5,
+        Speed = 19000
     }
 
     if rand < 20 then
@@ -25,9 +28,6 @@ function Asteroid:Create()
         asteroid.x = math.random(Width)
         asteroid.y = Height
     end
-    asteroid.sx = 0.5
-    asteroid.sy = 0.5
-    asteroid.Speed = 19000
     asteroid.body = love.physics.newBody(World, asteroid.x, asteroid.y, "dynamic")
     asteroid.shape = love.physics.newCircleShape(0.5*(asteroid.w/2))
     asteroid.fixture = love.physics.newFixture(asteroid.body, asteroid.shape, 1)
