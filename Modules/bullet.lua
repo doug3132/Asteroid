@@ -1,5 +1,6 @@
-Bullet = {}
-Bullet.img = love.graphics.newImage("img/bullet.png")
+Bullet = {
+    img = love.graphics.newImage("img/bullet.png")
+}
 
 function Bullet:Create(num)
     local bullet = {}

@@ -1,14 +1,17 @@
-Asteroid = {}
-Asteroid.img = love.graphics.newImage("img/Asteroid_Brown.png")
-Asteroid.asteroids = {}
-Asteroid.cd = 1
-Asteroid.canSpawn = 0
+Asteroid = {
+    img = love.graphics.newImage("img/Asteroid_Brown.png"),
+    asteroids = {},
+    cd = 5,
+    canSpawn = 1
+}
 
 function Asteroid:Create()
     local rand = math.random(100)
-    local asteroid = {}
-    asteroid.w = Asteroid.img:getWidth()
-    asteroid.h = Asteroid.img:getHeight()
+    local asteroid = {
+        w = Asteroid.img:getWidth(),
+        h = Asteroid.img:getHeight()
+    }
+
     if rand < 20 then
         asteroid.x = 0
         asteroid.y = math.random(Height)
