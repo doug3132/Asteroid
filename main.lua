@@ -1,6 +1,8 @@
 require("Modules.Player")
 require("Modules.bullet")
 require("Modules.asteroids")
+require("Modules.asteroids")
+
 Width = love.graphics.getWidth()
 Height = love.graphics.getHeight()
 
@@ -11,7 +13,7 @@ function love.load()
     love.graphics.setBackgroundColor(100/255,100/255,130/255)
 
     Player:Load()
-
+    Asteroid:Create()
     static = {
         b = love.physics.newBody(World, 400,400, "static"),
         s = love.physics.newRectangleShape(200,50),

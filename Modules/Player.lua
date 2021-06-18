@@ -15,7 +15,7 @@ function Player:Load()
    self.velx = self.Speed * math.cos(math.pi / 4)
    self.vely = self.Speed * math.sin(math.pi / 4)
    self.bullets = {}
-   self.cd = 0.3
+   self.cd = 0.9
    self.canFire = 0
    self.body = love.physics.newBody(World, self.x, self.y, "dynamic")
    self.shape = love.physics.newCircleShape(0.1*(self.w/2))
@@ -55,9 +55,9 @@ function Player:Update(dt)
 
    self.canFire = self.canFire - dt
    if love.mouse.isDown(1) and self.canFire <= 0 then
+      love.audio.play(self.bulletSound)
       self:Fire()
       self.canFire = self.cd
-      love.audio.play(self.bulletSound)
    end
 end
 
