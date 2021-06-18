@@ -16,7 +16,7 @@ function Bullet:Create(num)
         bullet.oy = bullet.h / 2
         bullet.sx = 0.5
         bullet.sy = 0.5
-        bullet.Speed = 100000
+        bullet.Speed = 19000
         bullet.life = 3
         bullet.body = love.physics.newBody(World, bullet.x, bullet.y, "dynamic")
         bullet.shape = love.physics.newCircleShape(0.5*(bullet.w/2))

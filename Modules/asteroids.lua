@@ -1,7 +1,7 @@
 Asteroid = {}
 Asteroid.img = love.graphics.newImage("img/Asteroid_Brown.png")
 Asteroid.asteroids = {}
-Asteroid.cd = 5
+Asteroid.cd = 1
 Asteroid.canSpawn = 0
 
 function Asteroid:Create()
@@ -22,22 +22,28 @@ function Asteroid:Create()
         asteroid.x = math.random(Width)
         asteroid.y = Height
     end
-
+    asteroid.sx = 0.5
+    asteroid.sy = 0.5
+    asteroid.Speed = 19000
     asteroid.body = love.physics.newBody(World, asteroid.x, asteroid.y, "dynamic")
-    asteroid.shape = love.physics.newCircleShape(0.1*(asteroid.w/2))
+    asteroid.shape = love.physics.newCircleShape(0.5*(asteroid.w/2))
     asteroid.fixture = love.physics.newFixture(asteroid.body, asteroid.shape, 1)
     asteroid.fixture:setRestitution(0.9)
     asteroid.fixture:setFriction(1)
+    asteroid.fixture:setUserData("asteroid"..math.random(1000))
     return asteroid
 end
 
 function Asteroid:Update(dt)
     self.canSpawn = self.canSpawn - dt
-    if self.canSpawn < 0 then
-        table.insert(Asteroid.asteroids, Asteroid:Create())
+    if self.canSpawn <= 0 then
+        table.insert(self.asteroids, self:Create())
+        self.canSpawn = self.cd
     end 
 end
 
 function Asteroid:Draw()
-    
+    for i, b in ipairs(self.asteroids) do
+        love.graphics.draw(self.img, b.body:getX(), b.body:getY(), b.r, b.sx,b.sy, b.ox, b.oy)
+    end
 end

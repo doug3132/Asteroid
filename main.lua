@@ -27,12 +27,14 @@ end
 function love.update(dt)
     Player:Update(dt)
     Bullet:Update(dt)
+    Asteroid:Update(dt)
     World:update(dt)
 end
 
 function love.draw()
     Bullet:Draw()
     Player:Draw()
+    Asteroid:Draw()
     love.graphics.polygon("line", static.b:getWorldPoints(static.s:getPoints()))
     love.graphics.print("Bullets: "..#Player.bullets)
 end
