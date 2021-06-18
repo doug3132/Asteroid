@@ -1,7 +1,6 @@
 require("Modules.Player")
 require("Modules.bullet")
 require("Modules.asteroids")
-require("Modules.asteroids")
 
 Width = love.graphics.getWidth()
 Height = love.graphics.getHeight()
@@ -13,6 +12,7 @@ function love.load()
     love.graphics.setBackgroundColor(100/255,100/255,130/255)
 
     Player:Load()
+
     Asteroid:Create()
     static = {
         b = love.physics.newBody(World, 400,400, "static"),
@@ -39,7 +39,7 @@ end
 
 function love.keypressed(key)
     if key == "escape" then
-        love.event.quit("apertou esc")
+        love.event.quit()
     end
 end
 
