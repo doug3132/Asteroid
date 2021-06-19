@@ -59,3 +59,9 @@ To get a local copy up and running follow these simple example steps.
 ## Usage
 
 It's a simple game, enjoy!
+
+* You only get one life, avoid asteroids at all costs.
+* You can destroy an asteroid with 3 shots.
+* Asteroids don't fragment like the original game.
+* Your score is measured by the amount of time you survive.
+* `R` to restart and `ESC` to quit.
