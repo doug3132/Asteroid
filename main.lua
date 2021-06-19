@@ -5,11 +5,13 @@ require("Modules.asteroids")
 Width = love.graphics.getWidth()
 Height = love.graphics.getHeight()
 Destroy_queue = {}
+Timer = 0
+Live = true
 
 function love.load()
     love.physics.setMeter(64)
     World = love.physics.newWorld(0.1*64, 0.1*64, true)
-    World:setCallbacks(beginContact, endContact, preSolve, postSolve)
+    World:setCallbacks(beginContact, endContact, preSolve)
     love.graphics.setBackgroundColor(100/255,100/255,130/255)
 
     Player:Load()
@@ -25,29 +27,44 @@ function love.load()
 end
 
 function love.update(dt)
-    Asteroid:Update(dt)
-    Player:Update(dt)
-    Bullet:Update(dt)
-    if table.getn(Destroy_queue) > 0 then
-        for b in pairs(Destroy_queue) do
-            World:DestroyBody(b)
-            Destroy_queue[b] = nil
+    if Live then
+        Timer = Timer + dt
+        Asteroid:Update(dt)
+        Player:Update(dt)
+        Bullet:Update(dt)
+        if table.getn(Destroy_queue) > 0 then
+            for b in pairs(Destroy_queue) do
+                World:DestroyBody(b)
+                Destroy_queue[b] = nil
+            end
         end
+        World:update(dt)
     end
-    World:update(dt)
 end
 
 function love.draw()
-    Asteroid:Draw()
-    Bullet:Draw()
-    Player:Draw()
-    love.graphics.polygon("line", static.b:getWorldPoints(static.s:getPoints()))
-    love.graphics.print("Bullets: "..#Player.bullets)
+    if Live then
+        Asteroid:Draw()
+        Bullet:Draw()
+        Player:Draw()
+        love.graphics.polygon("line", static.b:getWorldPoints(static.s:getPoints()))
+        love.graphics.print("Bullets: "..#Player.bullets)
+        love.graphics.print("Score: "..math.floor(Timer), 0, 15)
+    else
+        alignCenter = (Width/2)-70
+        love.graphics.print("Game Over", alignCenter, (Height/2)-100, 0, 1.5, 1.5)
+        love.graphics.print("Final Score: "..math.floor(Timer), alignCenter, (Height/2)-50)
+        love.graphics.print("'ESC' to quit", alignCenter, (Height/2)-30, 0, 0.8)
+        love.graphics.print("or 'R' to play again", alignCenter, (Height/2)-15, 0, 0.8)
+    end
 end
 
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    end
+    if key == "r" then
+        love.event.quit("restart")
     end
 end
 
@@ -55,7 +72,7 @@ function beginContact(a, b, coll)
     x,y = coll:getNormal()
     Bullet:BeginContact(a, b, coll)
     Asteroid:BeginContact(a, b, coll)
-    
+    Player:BeginContact(a, b, coll)
 end
 
 function endContact()
@@ -63,11 +80,5 @@ function endContact()
 end
 
 function preSolve()
-    if persisting == 0 then
-    elseif persisting < 20 then
-    end
     persisting = persisting + 1
-end
-
-function postSolve(a, b, coll, normalimpulse, tangentimpulse)
 end

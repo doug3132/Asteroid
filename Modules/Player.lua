@@ -65,6 +65,12 @@ function Player:Draw()
    love.graphics.draw(self.img, self.body:getX(), self.body:getY(), self.r, self.sx,self.sy, self.ox, self.oy)
 end
 
+function Player:BeginContact(a, b, coll)
+   if a:getUserData() == "player" and string.match(b:getUserData(), "asteroid") then
+      Live = false
+   end
+end
+
 function Player:Fire()
    table.insert(Player.bullets, Bullet:Create(self.numBullets))
    self.numBullets = self.numBullets + 1
